@@ -5,29 +5,36 @@ import java.util.*;
 
 public class Planet {
     private final UUID id;
-    private final Map<SpaceProbe, Coordinates> occupiedLands;
+    private final Map<SpaceProbe, Coordinates> landedPlanets;
     private final Coordinates landSize;
 
-    public Planet(Coordinates landSize) {
+    public Planet(UUID id, Coordinates landSize) {
         this.landSize = landSize;
+        this.id = id;
 
-        this.id = UUID.randomUUID();
-        this.occupiedLands = new HashMap<>();
+        this.landedPlanets = new HashMap<>();
     }
 
     public void registerLandOccupation(SpaceProbe spaceProbe, Coordinates coordinates) throws Exception {
         if (!isCoordinatesValueValid(coordinates) || !isCoordinatesFree(coordinates)) {
             throw new Exception("This Coordinates is neither available or valid");
         }
-        occupiedLands.put(spaceProbe, coordinates);
+        landedPlanets.put(spaceProbe, coordinates);
     }
 
     public Boolean isSpaceProbeOnLand(SpaceProbe spaceProbe) {
-        return occupiedLands.containsKey(spaceProbe);
+        return landedPlanets.containsKey(spaceProbe);
+    }
+
+    public Coordinates getSpaceProbePosition(SpaceProbe spaceProbe) throws Exception {
+        if (!isSpaceProbeOnLand(spaceProbe)) {
+            throw new Exception("Provided SpaceProbe is not on Planet");
+        }
+        return landedPlanets.get(spaceProbe);
     }
 
     private Boolean isCoordinatesFree(Coordinates coordinates) {
-        return !this.occupiedLands.containsValue(coordinates);
+        return !this.landedPlanets.containsValue(coordinates);
     }
 
     private Boolean isCoordinatesValueValid(Coordinates coordinates) {

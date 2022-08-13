@@ -5,34 +5,23 @@ import java.util.UUID;
 
 public class SpaceProbe {
     private final UUID id;
-    private final Planet planet;
-    private Coordinates position;
-    private Boolean isLanded;
+    private Planet planet;
 
-    public SpaceProbe(Planet planet, Coordinates position) {
-        this.planet = planet;
-        this.position = position;
-
-        this.isLanded = false;
-        this.id = UUID.randomUUID();
+    public SpaceProbe(UUID id) {
+        this.id = id;
     }
 
-    public void land(Coordinates coordinates) throws Exception {
-        if (isLanded) {
-            throw new Exception("SpaceProbe is already on planet");
-        }
-
-        this.planet.registerLandOccupation(this, coordinates);
-        this.position = coordinates;
-        this.isLanded = true;
+    public void landOnPlanet(Planet planet, Coordinates coordinates) throws Exception {
+        planet.registerLandOccupation(this, coordinates);
+        this.planet = planet;
     }
 
     public Boolean isLanded() {
-        return isLanded;
+        return this.planet != null;
     }
 
-    public Coordinates getPosition() {
-        return position;
+    public Coordinates getPlanetPosition() throws Exception {
+        return this.planet.getSpaceProbePosition(this);
     }
 
     @Override

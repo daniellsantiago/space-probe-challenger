@@ -6,13 +6,15 @@ import java.util.UUID;
 public class SpaceProbe {
     private final UUID id;
     private Planet planet;
+    private Position position;
 
     public SpaceProbe(UUID id) {
         this.id = id;
     }
 
-    public void landOnPlanet(Planet planet, Coordinates coordinates) throws Exception {
-        planet.registerLandOccupation(this, coordinates);
+    public void landOnPlanet(Planet planet, Position position) throws Exception {
+        planet.registerLandOccupation(this, position.getCoordinates());
+        this.position = position;
         this.planet = planet;
     }
 
@@ -23,15 +25,8 @@ public class SpaceProbe {
         planet.registerLandOccupation(this, coordinates);
     }
 
-    public Boolean isLanded() {
+    private Boolean isLanded() {
         return this.planet != null;
-    }
-
-    public Coordinates getPlanetPosition() throws Exception {
-        if (!isLanded()) {
-            throw new Exception("SpaceProbe is not on Planet");
-        }
-        return this.planet.getSpaceProbeCoordinates(this);
     }
 
     @Override

@@ -50,7 +50,7 @@ public class PlanetTest {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-        spaceProbe.landOnPlanet(planet, new Coordinates(2, 3));
+        spaceProbe.landOnPlanet(planet, new Position(new Coordinates(2, 3), Direction.N));
 
         // When
         Coordinates spaceProbePosition = planet.getSpaceProbeCoordinates(spaceProbe);
@@ -74,7 +74,7 @@ public class PlanetTest {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-        spaceProbe.landOnPlanet(planet, new Coordinates(4, 4));
+        spaceProbe.landOnPlanet(planet, new Position(new Coordinates(4, 4), Direction.S));
 
         // When
         Boolean isSpaceProbeLanded = planet.isSpaceProbeOnLand(spaceProbe);

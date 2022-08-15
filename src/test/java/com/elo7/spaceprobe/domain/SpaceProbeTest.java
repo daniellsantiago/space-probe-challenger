@@ -14,12 +14,11 @@ public class SpaceProbeTest {
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
 
         // When
-        Coordinates spaceProbeCoordinates = new Coordinates(3, 4);
-        spaceProbe.landOnPlanet(planet, spaceProbeCoordinates);
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.E);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
 
         // Then
-        Assertions.assertTrue(spaceProbe.isLanded());
-        Assertions.assertEquals(spaceProbeCoordinates, spaceProbe.getPlanetPosition());
+        Assertions.assertEquals(spaceProbePosition.getCoordinates(), planet.getSpaceProbeCoordinates(spaceProbe));
     }
 
     @Test
@@ -27,12 +26,12 @@ public class SpaceProbeTest {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe landedSpaceProbe = new SpaceProbe(UUID.randomUUID());
-        Coordinates landCoordinates = new Coordinates(3, 2);
-        landedSpaceProbe.landOnPlanet(planet, landCoordinates);
+        Position landPosition = new Position(new Coordinates(3, 2), Direction.N);
+        landedSpaceProbe.landOnPlanet(planet, landPosition);
 
         // When / Then
         SpaceProbe newSpaceProbe = new SpaceProbe(UUID.randomUUID());
-        Assertions.assertThrows(Exception.class, () -> newSpaceProbe.landOnPlanet(planet, landCoordinates));
+        Assertions.assertThrows(Exception.class, () -> newSpaceProbe.landOnPlanet(planet, landPosition));
     }
 
     @Test
@@ -42,8 +41,8 @@ public class SpaceProbeTest {
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
 
         // When / Then
-        Coordinates negativeCoordinates = new Coordinates(-1, 2);
-        Assertions.assertThrows(Exception.class, () -> spaceProbe.landOnPlanet(planet, negativeCoordinates));
+        Position negativePosition = new Position(new Coordinates(-1, 2), Direction.N);
+        Assertions.assertThrows(Exception.class, () -> spaceProbe.landOnPlanet(planet, negativePosition));
     }
 
     @Test
@@ -53,57 +52,8 @@ public class SpaceProbeTest {
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
 
         // When / Then
-        Coordinates invalidCoordinates = new Coordinates(7, 2);
-        Assertions.assertThrows(Exception.class, () -> spaceProbe.landOnPlanet(planet, invalidCoordinates));
-    }
-
-    @Test
-    void Should_ReturnTrue_When_PlanetIsLanded() throws Exception {
-        // Given
-        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
-        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-        spaceProbe.landOnPlanet(planet, new Coordinates(1, 2));
-
-        // When
-        Boolean isLanded = spaceProbe.isLanded();
-
-        // Then
-        Assertions.assertTrue(isLanded);
-    }
-
-    @Test
-    void Should_ReturnFalse_When_PlanetIsNotLanded() {
-        // Given
-        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-
-        // When
-        Boolean isLanded = spaceProbe.isLanded();
-
-        // Then
-        Assertions.assertFalse(isLanded);
-    }
-
-    @Test
-    void Should_ReturnPlanetPosition_When_ItIsLanded() throws Exception {
-        // Given
-        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
-        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-        spaceProbe.landOnPlanet(planet, new Coordinates(5, 5));
-
-        // When
-        Coordinates planetPosition = spaceProbe.getPlanetPosition();
-
-        // Then
-        Assertions.assertEquals(new Coordinates(5, 5), planetPosition);
-    }
-
-    @Test
-    void Should_ThrowException_When_TriesToGetPlanetPositionButSpaceProbeIsNotRegistered() {
-        // Given
-        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-
-        // Then / When
-        Assertions.assertThrows(Exception.class, spaceProbe::getPlanetPosition);
+        Position invalidPosition = new Position(new Coordinates(7, 2), Direction.N);
+        Assertions.assertThrows(Exception.class, () -> spaceProbe.landOnPlanet(planet, invalidPosition));
     }
 
     @Test
@@ -111,15 +61,15 @@ public class SpaceProbeTest {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-        Coordinates spaceProbeCoordinates = new Coordinates(3, 4);
-        spaceProbe.landOnPlanet(planet, spaceProbeCoordinates);
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.N);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
 
         // When
         Coordinates newCoordinates = new Coordinates(0, 0);
         spaceProbe.move(newCoordinates);
 
         // Then
-        Assertions.assertEquals(newCoordinates, spaceProbe.getPlanetPosition());
+        Assertions.assertEquals(newCoordinates, planet.getSpaceProbeCoordinates(spaceProbe));
     }
 
     @Test

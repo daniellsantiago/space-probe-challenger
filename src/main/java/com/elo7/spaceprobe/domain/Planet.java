@@ -26,7 +26,7 @@ public class Planet {
         return landedPlanets.containsKey(spaceProbe);
     }
 
-    public Coordinates getSpaceProbePosition(SpaceProbe spaceProbe) throws Exception {
+    public Coordinates getSpaceProbeCoordinates(SpaceProbe spaceProbe) throws Exception {
         if (!isSpaceProbeOnLand(spaceProbe)) {
             throw new Exception("Provided SpaceProbe is not on Planet");
         }

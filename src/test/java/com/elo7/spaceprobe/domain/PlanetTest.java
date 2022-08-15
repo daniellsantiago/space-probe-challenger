@@ -53,7 +53,7 @@ public class PlanetTest {
         spaceProbe.landOnPlanet(planet, new Coordinates(2, 3));
 
         // When
-        Coordinates spaceProbePosition = planet.getSpaceProbePosition(spaceProbe);
+        Coordinates spaceProbePosition = planet.getSpaceProbeCoordinates(spaceProbe);
 
         // Then
         Assertions.assertEquals(new Coordinates(2, 3), spaceProbePosition);
@@ -66,7 +66,7 @@ public class PlanetTest {
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
 
         // Then / When
-        Assertions.assertThrows(Exception.class, () -> planet.getSpaceProbePosition(spaceProbe));
+        Assertions.assertThrows(Exception.class, () -> planet.getSpaceProbeCoordinates(spaceProbe));
     }
 
     @Test

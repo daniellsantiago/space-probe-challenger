@@ -105,4 +105,29 @@ public class SpaceProbeTest {
         // Then / When
         Assertions.assertThrows(Exception.class, spaceProbe::getPlanetPosition);
     }
+
+    @Test
+    void Should_ChangeSpaceProbePositionOnPlanet_When_ItIsLanded() throws Exception {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Coordinates spaceProbeCoordinates = new Coordinates(3, 4);
+        spaceProbe.landOnPlanet(planet, spaceProbeCoordinates);
+
+        // When
+        Coordinates newCoordinates = new Coordinates(0, 0);
+        spaceProbe.move(newCoordinates);
+
+        // Then
+        Assertions.assertEquals(newCoordinates, spaceProbe.getPlanetPosition());
+    }
+
+    @Test
+    void Should_ThrowException_When_TriesToMovePlanetButItIsLanded() {
+        // Given
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+
+        // Then / When
+        Assertions.assertThrows(Exception.class, () -> spaceProbe.move(new Coordinates(5, 5)));
+    }
 }

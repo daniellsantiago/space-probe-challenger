@@ -16,6 +16,13 @@ public class SpaceProbe {
         this.planet = planet;
     }
 
+    public void move(Coordinates coordinates) throws Exception {
+        if (!isLanded()) {
+            throw new Exception("SpaceProbe is not on Planet");
+        }
+        planet.registerLandOccupation(this, coordinates);
+    }
+
     public Boolean isLanded() {
         return this.planet != null;
     }

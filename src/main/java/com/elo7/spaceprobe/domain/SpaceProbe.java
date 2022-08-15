@@ -12,15 +12,15 @@ public class SpaceProbe {
         this.id = id;
     }
 
-    public void landOnPlanet(Planet planet, Position position) throws Exception {
+    public void landOnPlanet(Planet planet, Position position) throws BusinessException {
         planet.registerLandOccupation(this, position.getCoordinates());
         this.position = position;
         this.planet = planet;
     }
 
-    public void move(Direction direction) throws Exception {
+    public void move(Direction direction) throws BusinessException {
         if (!isLanded()) {
-            throw new Exception("SpaceProbe is not on Planet");
+            throw new BusinessException("SpaceProbe is not on Planet");
         }
         int actualX = position.getCoordinates().getX();
         int actualY = position.getCoordinates().getY();
@@ -39,7 +39,7 @@ public class SpaceProbe {
                 newCoordinates =new Coordinates(actualX - 1, actualY);
                 break;
             default:
-                throw new Exception("Given Direction is Unknown");
+                throw new BusinessException("Given Direction is Unknown");
         }
         planet.registerLandOccupation(this, newCoordinates);
         this.position = new Position(newCoordinates, direction);

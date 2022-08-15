@@ -8,7 +8,7 @@ import java.util.UUID;
 public class SpaceProbeTest {
 
     @Test
-    void Should_LandSpaceProbeOnPlanet_When_PlanetPositionIsAvailable() throws Exception {
+    void Should_LandSpaceProbeOnPlanet_When_PlanetPositionIsAvailable() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -22,7 +22,7 @@ public class SpaceProbeTest {
     }
 
     @Test
-    void Should_ThrowException_When_TriesToLandOnUnavailablePlanetPosition() throws Exception {
+    void Should_ThrowException_When_TriesToLandOnUnavailablePlanetPosition() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe landedSpaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -57,7 +57,7 @@ public class SpaceProbeTest {
     }
 
     @Test
-    void Should_MoveForward_When_GivenDirectionIsNorth() throws Exception {
+    void Should_MoveForward_When_GivenDirectionIsNorth() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -73,7 +73,7 @@ public class SpaceProbeTest {
     }
 
     @Test
-    void Should_MoveRight_When_GivenDirectionIsEast() throws Exception {
+    void Should_MoveRight_When_GivenDirectionIsEast() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -89,7 +89,7 @@ public class SpaceProbeTest {
     }
 
     @Test
-    void Should_MoveBack_When_GivenDirectionIsSouth() throws Exception {
+    void Should_MoveBack_When_GivenDirectionIsSouth() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -105,7 +105,7 @@ public class SpaceProbeTest {
     }
 
     @Test
-    void Should_MoveLeft_When_GivenDirectionIsWest() throws Exception {
+    void Should_MoveLeft_When_GivenDirectionIsWest() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());

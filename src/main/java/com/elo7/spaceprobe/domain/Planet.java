@@ -15,10 +15,11 @@ public class Planet {
         this.landedPlanets = new HashMap<>();
     }
 
-    public void registerLandOccupation(SpaceProbe spaceProbe, Coordinates coordinates) throws Exception {
+    public void registerLandOccupation(SpaceProbe spaceProbe, Coordinates coordinates) throws BusinessException {
         if (!isCoordinatesValueValid(coordinates) || !isCoordinatesFree(coordinates)) {
-            throw new Exception("This Coordinates is neither available or valid");
+            throw new BusinessException("This Coordinates is neither available or valid");
         }
+
         landedPlanets.put(spaceProbe, coordinates);
     }
 
@@ -26,9 +27,9 @@ public class Planet {
         return landedPlanets.containsKey(spaceProbe);
     }
 
-    public Coordinates getSpaceProbeCoordinates(SpaceProbe spaceProbe) throws Exception {
+    public Coordinates getSpaceProbeCoordinates(SpaceProbe spaceProbe) {
         if (!isSpaceProbeOnLand(spaceProbe)) {
-            throw new Exception("Provided SpaceProbe is not on Planet");
+            throw new RuntimeException("Provided SpaceProbe is not on Planet");
         }
         return landedPlanets.get(spaceProbe);
     }

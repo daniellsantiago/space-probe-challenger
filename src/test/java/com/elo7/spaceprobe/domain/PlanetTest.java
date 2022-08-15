@@ -8,7 +8,7 @@ import java.util.UUID;
 public class PlanetTest {
 
     @Test
-    void Should_RegisterSpaceProbeAndItsCoordinates_When_CoordinatesAreEitherValidAndAvailable() throws Exception {
+    void Should_RegisterSpaceProbeAndItsCoordinates_When_CoordinatesAreEitherValidAndAvailable() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -46,7 +46,7 @@ public class PlanetTest {
     }
 
     @Test
-    void Should_ReturnSpaceProbeCoordinates_When_ItIsRegistered() throws Exception {
+    void Should_ReturnSpaceProbeCoordinates_When_ItIsRegistered() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -70,7 +70,7 @@ public class PlanetTest {
     }
 
     @Test
-    void Should_ReturnTrue_When_SpaceProbeIsRegisteredOnPlanet() throws Exception {
+    void Should_ReturnTrue_When_SpaceProbeIsRegisteredOnPlanet() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());

@@ -56,4 +56,53 @@ public class SpaceProbeTest {
         Coordinates invalidCoordinates = new Coordinates(7, 2);
         Assertions.assertThrows(Exception.class, () -> spaceProbe.landOnPlanet(planet, invalidCoordinates));
     }
+
+    @Test
+    void Should_ReturnTrue_When_PlanetIsLanded() throws Exception {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        spaceProbe.landOnPlanet(planet, new Coordinates(1, 2));
+
+        // When
+        Boolean isLanded = spaceProbe.isLanded();
+
+        // Then
+        Assertions.assertTrue(isLanded);
+    }
+
+    @Test
+    void Should_ReturnFalse_When_PlanetIsNotLanded() {
+        // Given
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+
+        // When
+        Boolean isLanded = spaceProbe.isLanded();
+
+        // Then
+        Assertions.assertFalse(isLanded);
+    }
+
+    @Test
+    void Should_ReturnPlanetPosition_When_ItIsLanded() throws Exception {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        spaceProbe.landOnPlanet(planet, new Coordinates(5, 5));
+
+        // When
+        Coordinates planetPosition = spaceProbe.getPlanetPosition();
+
+        // Then
+        Assertions.assertEquals(new Coordinates(5, 5), planetPosition);
+    }
+
+    @Test
+    void Should_ThrowException_When_TriesToGetPlanetPositionButSpaceProbeIsNotRegistered() {
+        // Given
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+
+        // Then / When
+        Assertions.assertThrows(Exception.class, spaceProbe::getPlanetPosition);
+    }
 }

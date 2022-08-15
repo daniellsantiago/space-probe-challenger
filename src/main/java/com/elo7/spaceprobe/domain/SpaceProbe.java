@@ -21,6 +21,9 @@ public class SpaceProbe {
     }
 
     public Coordinates getPlanetPosition() throws Exception {
+        if (!isLanded()) {
+            throw new Exception("SpaceProbe is not on Planet");
+        }
         return this.planet.getSpaceProbePosition(this);
     }
 

@@ -57,7 +57,7 @@ public class SpaceProbeTest {
     }
 
     @Test
-    void Should_ChangeSpaceProbePositionOnPlanet_When_ItIsLanded() throws Exception {
+    void Should_MoveForward_When_GivenDirectionIsNorth() throws Exception {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -65,19 +65,58 @@ public class SpaceProbeTest {
         spaceProbe.landOnPlanet(planet, spaceProbePosition);
 
         // When
-        Coordinates newCoordinates = new Coordinates(0, 0);
-        spaceProbe.move(newCoordinates);
+        spaceProbe.move(Direction.N);
 
         // Then
-        Assertions.assertEquals(newCoordinates, planet.getSpaceProbeCoordinates(spaceProbe));
+        Assertions.assertEquals(new Coordinates(3, 5), spaceProbe.getCoordinates());
+        Assertions.assertEquals(Direction.N, spaceProbe.getDirection());
     }
 
     @Test
-    void Should_ThrowException_When_TriesToMovePlanetButItIsLanded() {
+    void Should_MoveRight_When_GivenDirectionIsEast() throws Exception {
         // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.N);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
 
-        // Then / When
-        Assertions.assertThrows(Exception.class, () -> spaceProbe.move(new Coordinates(5, 5)));
+        // When
+        spaceProbe.move(Direction.E);
+
+        // Then
+        Assertions.assertEquals(new Coordinates(4, 4), spaceProbe.getCoordinates());
+        Assertions.assertEquals(Direction.E, spaceProbe.getDirection());
+    }
+
+    @Test
+    void Should_MoveBack_When_GivenDirectionIsSouth() throws Exception {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.N);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
+
+        // When
+        spaceProbe.move(Direction.S);
+
+        // Then
+        Assertions.assertEquals(new Coordinates(3, 3), spaceProbe.getCoordinates());
+        Assertions.assertEquals(Direction.S, spaceProbe.getDirection());
+    }
+
+    @Test
+    void Should_MoveLeft_When_GivenDirectionIsWest() throws Exception {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.N);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
+
+        // When
+        spaceProbe.move(Direction.W);
+
+        // Then
+        Assertions.assertEquals(new Coordinates(2, 4), spaceProbe.getCoordinates());
+        Assertions.assertEquals(Direction.W, spaceProbe.getDirection());
     }
 }

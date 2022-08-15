@@ -18,11 +18,39 @@ public class SpaceProbe {
         this.planet = planet;
     }
 
-    public void move(Coordinates coordinates) throws Exception {
+    public void move(Direction direction) throws Exception {
         if (!isLanded()) {
             throw new Exception("SpaceProbe is not on Planet");
         }
-        planet.registerLandOccupation(this, coordinates);
+        int actualX = position.getCoordinates().getX();
+        int actualY = position.getCoordinates().getY();
+        Coordinates newCoordinates;
+        switch (direction) {
+            case N:
+                newCoordinates = new Coordinates(actualX, actualY + 1);
+                break;
+            case E:
+                newCoordinates = new Coordinates(actualX + 1, actualY);
+                break;
+            case S:
+                newCoordinates = new Coordinates(actualX, actualY - 1);
+                break;
+            case W:
+                newCoordinates =new Coordinates(actualX - 1, actualY);
+                break;
+            default:
+                throw new Exception("Given Direction is Unknown");
+        }
+        planet.registerLandOccupation(this, newCoordinates);
+        this.position = new Position(newCoordinates, direction);
+    }
+
+    public Coordinates getCoordinates() {
+        return position.getCoordinates();
+    }
+
+    public Direction getDirection() {
+        return position.getDirection();
     }
 
     private Boolean isLanded() {

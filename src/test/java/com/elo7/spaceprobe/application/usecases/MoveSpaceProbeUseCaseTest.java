@@ -30,18 +30,19 @@ public class MoveSpaceProbeUseCaseTest {
     @Test
     void Should_PerformMovement_When_SpaceProbeIsStoredAndMoveCommandsAreProvided() throws BusinessException {
         // Given
+        UUID spaceProbeId = UUID.randomUUID();
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
-        SpaceProbe spaceProbe = new SpaceProbe();
+        SpaceProbe spaceProbe = new SpaceProbe(spaceProbeId);
         Position landPosition = new Position(new Coordinates(2, 2), Direction.N);
         spaceProbe.landOnPlanet(planet, landPosition);
 
         ChangeSpaceProbePositionDto request = new ChangeSpaceProbePositionDto(
             List.of(MoveCommandDto.M, MoveCommandDto.M),
-            spaceProbe.getId()
+            spaceProbeId
         );
 
         // When
-        Mockito.when(spaceProbeRepository.findById(spaceProbe.getId())).thenReturn(Optional.of(spaceProbe));
+        Mockito.when(spaceProbeRepository.findById(spaceProbeId)).thenReturn(Optional.of(spaceProbe));
         moveSpaceProbeUseCase.execute(request);
 
         // Then
@@ -52,18 +53,19 @@ public class MoveSpaceProbeUseCaseTest {
     @Test
     void Should_PerformRotation_When_SpaceProbeIsStoredAndRotationCommandsAreProvided() throws BusinessException {
         // Given
+        UUID spaceProbeId = UUID.randomUUID();
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
-        SpaceProbe spaceProbe = new SpaceProbe();
+        SpaceProbe spaceProbe = new SpaceProbe(spaceProbeId);
         Position landPosition = new Position(new Coordinates(2, 2), Direction.N);
         spaceProbe.landOnPlanet(planet, landPosition);
 
         ChangeSpaceProbePositionDto request = new ChangeSpaceProbePositionDto(
             List.of(RotateCommandDto.L, RotateCommandDto.R),
-            spaceProbe.getId()
+            spaceProbeId
         );
 
         // When
-        Mockito.when(spaceProbeRepository.findById(spaceProbe.getId())).thenReturn(Optional.of(spaceProbe));
+        Mockito.when(spaceProbeRepository.findById(spaceProbeId)).thenReturn(Optional.of(spaceProbe));
         moveSpaceProbeUseCase.execute(request);
 
         // Then
@@ -74,18 +76,19 @@ public class MoveSpaceProbeUseCaseTest {
     @Test
     void Should_PerformRotationAndMovement_When_SpaceProbeIsStoredAndRotationAndMoveCommandsAreProvided() throws BusinessException {
         // Given
+        UUID spaceProbeId = UUID.randomUUID();
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
-        SpaceProbe spaceProbe = new SpaceProbe();
+        SpaceProbe spaceProbe = new SpaceProbe(spaceProbeId);
         Position landPosition = new Position(new Coordinates(2, 2), Direction.N);
         spaceProbe.landOnPlanet(planet, landPosition);
 
         ChangeSpaceProbePositionDto request = new ChangeSpaceProbePositionDto(
             List.of(RotateCommandDto.L, MoveCommandDto.M, RotateCommandDto.R, MoveCommandDto.M),
-            spaceProbe.getId()
+            spaceProbeId
         );
 
         // When
-        Mockito.when(spaceProbeRepository.findById(spaceProbe.getId())).thenReturn(Optional.of(spaceProbe));
+        Mockito.when(spaceProbeRepository.findById(spaceProbeId)).thenReturn(Optional.of(spaceProbe));
         moveSpaceProbeUseCase.execute(request);
 
         // Then

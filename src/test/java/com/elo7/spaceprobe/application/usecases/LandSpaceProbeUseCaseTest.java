@@ -34,21 +34,22 @@ public class LandSpaceProbeUseCaseTest {
     @Test
     void Should_LandSpaceProbe_When_PlanetAndSpaceProbeAreStored() {
         // Given
+        UUID spaceProbeId = UUID.randomUUID();
         Coordinates coordinates = new Coordinates(3, 4);
         Planet planet = new Planet(UUID.randomUUID(), coordinates);
-        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        SpaceProbe spaceProbe = new SpaceProbe(spaceProbeId);
 
         Coordinates landingCoordinates = new Coordinates(UUID.randomUUID(), 2, 3);
         LandSpaceProbeDTO landSpaceProbeDTO =
-            new LandSpaceProbeDTO(spaceProbe.getId(), planet.getId(), landingCoordinates, Direction.N);
+            new LandSpaceProbeDTO(spaceProbeId, planet.getId(), landingCoordinates, Direction.N);
 
         // When
         Mockito.when(planetRepository.findById(planet.getId())).thenReturn(Optional.of(planet));
-        Mockito.when(spaceProbeRepository.findById(spaceProbe.getId())).thenReturn(Optional.of(spaceProbe));
+        Mockito.when(spaceProbeRepository.findById(spaceProbeId)).thenReturn(Optional.of(spaceProbe));
         landSpaceProbeUseCase.execute(landSpaceProbeDTO);
 
         // Then
-        Assertions.assertNotNull(spaceProbe.getPlanet());
+        Assertions.assertNotNull(planet.isSpaceProbeOnLand(spaceProbe));
         Mockito.verify(spaceProbeRepository, Mockito.times(1)).save(spaceProbe);
     }
 

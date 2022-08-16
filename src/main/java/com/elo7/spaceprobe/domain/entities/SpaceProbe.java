@@ -63,7 +63,7 @@ public class SpaceProbe {
                 throw new BusinessException("Given Direction is Unknown");
         }
         this.planet.registerLandOccupation(this, newCoordinates);
-        this.setPosition(new Position(newCoordinates, getDirection()));
+        this.changeCoordinates(newCoordinates);
     }
 
     public void rotateClockwise() {
@@ -108,40 +108,16 @@ public class SpaceProbe {
         return position.getDirection();
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Planet getPlanet() {
-        return planet;
-    }
-
-    public void setPlanet(Planet planet) {
-        this.planet = planet;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
     private Boolean isLanded() {
         return this.planet != null;
     }
 
     private void changeDirection(Direction newDirection) {
-        position.setDirection(newDirection);
+        this.position = new Position(getCoordinates(), newDirection);
     }
 
-    private void changeCoordinates(int x, int y) {
-        getCoordinates().changeCoordinates(x, y);
+    private void changeCoordinates(Coordinates newCoordinates) {
+        this.position = new Position(newCoordinates, getDirection());
     }
 
     @Override

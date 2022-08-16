@@ -1,6 +1,8 @@
 package com.elo7.spaceprobe.integration;
 
-import com.elo7.spaceprobe.domain.*;
+import com.elo7.spaceprobe.domain.entities.*;
+import com.elo7.spaceprobe.domain.repository.PlanetRepository;
+import com.elo7.spaceprobe.domain.repository.SpaceProbeRepository;
 import com.elo7.spaceprobe.interfaces.http.dto.ChangeSpaceProbePositionRequest;
 import com.elo7.spaceprobe.interfaces.http.dto.ChangeSpaceProbePositionResponse;
 import com.elo7.spaceprobe.interfaces.http.dto.LandSpaceProbeRequest;

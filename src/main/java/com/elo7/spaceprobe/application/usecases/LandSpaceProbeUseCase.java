@@ -1,7 +1,12 @@
 package com.elo7.spaceprobe.application.usecases;
 
 import com.elo7.spaceprobe.application.dto.LandSpaceProbeDTO;
-import com.elo7.spaceprobe.domain.*;
+import com.elo7.spaceprobe.domain.entities.Planet;
+import com.elo7.spaceprobe.domain.entities.Position;
+import com.elo7.spaceprobe.domain.entities.SpaceProbe;
+import com.elo7.spaceprobe.domain.exception.BusinessException;
+import com.elo7.spaceprobe.domain.repository.PlanetRepository;
+import com.elo7.spaceprobe.domain.repository.SpaceProbeRepository;
 import com.elo7.spaceprobe.lib.ApplicationService;
 import com.elo7.spaceprobe.lib.exception.DomainException;
 import com.elo7.spaceprobe.lib.exception.NotFoundException;

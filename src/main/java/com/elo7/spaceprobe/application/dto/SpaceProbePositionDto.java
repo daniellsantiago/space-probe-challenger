@@ -1,6 +1,6 @@
 package com.elo7.spaceprobe.application.dto;
 
-import com.elo7.spaceprobe.domain.Direction;
+import com.elo7.spaceprobe.domain.entities.Direction;
 
 public class SpaceProbePositionDto {
     private int x;

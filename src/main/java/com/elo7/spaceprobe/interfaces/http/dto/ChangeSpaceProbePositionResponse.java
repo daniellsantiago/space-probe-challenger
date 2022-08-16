@@ -1,7 +1,7 @@
 package com.elo7.spaceprobe.interfaces.http.dto;
 
 import com.elo7.spaceprobe.application.dto.SpaceProbePositionDto;
-import com.elo7.spaceprobe.domain.Direction;
+import com.elo7.spaceprobe.domain.entities.Direction;
 
 public class ChangeSpaceProbePositionResponse {
     private int x;

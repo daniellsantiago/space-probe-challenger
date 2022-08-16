@@ -1,4 +1,4 @@
-package com.elo7.spaceprobe.domain;
+package com.elo7.spaceprobe.domain.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

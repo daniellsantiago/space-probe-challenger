@@ -1,4 +1,6 @@
-package com.elo7.spaceprobe.domain;
+package com.elo7.spaceprobe.domain.entities;
+
+import com.elo7.spaceprobe.domain.exception.BusinessException;
 
 import javax.persistence.*;
 import java.util.Objects;

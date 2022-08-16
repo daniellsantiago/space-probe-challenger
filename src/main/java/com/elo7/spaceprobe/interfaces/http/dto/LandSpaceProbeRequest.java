@@ -1,8 +1,8 @@
 package com.elo7.spaceprobe.interfaces.http.dto;
 
 import com.elo7.spaceprobe.application.dto.LandSpaceProbeDTO;
-import com.elo7.spaceprobe.domain.Coordinates;
-import com.elo7.spaceprobe.domain.Direction;
+import com.elo7.spaceprobe.domain.entities.Coordinates;
+import com.elo7.spaceprobe.domain.entities.Direction;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;

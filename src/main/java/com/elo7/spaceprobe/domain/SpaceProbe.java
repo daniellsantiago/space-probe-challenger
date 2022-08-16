@@ -15,11 +15,23 @@ public class SpaceProbe {
     @Embedded
     private Position position;
 
+    public SpaceProbe() {
+    }
+
+    public SpaceProbe(UUID id, Planet planet, Position position) {
+        this.id = id;
+        this.planet = planet;
+        this.position = position;
+    }
+
     public SpaceProbe(UUID id) {
         this.id = id;
     }
 
     public void landOnPlanet(Planet planet, Position position) throws BusinessException {
+        if (this.planet != null) {
+            throw new BusinessException("SpaceProbe is already on Planet");
+        }
         planet.registerLandOccupation(this, position.getCoordinates());
         this.position = position;
         this.planet = planet;
@@ -31,25 +43,56 @@ public class SpaceProbe {
         }
         int actualX = position.getCoordinates().getX();
         int actualY = position.getCoordinates().getY();
-        Coordinates newCoordinates;
         switch (direction) {
             case N:
-                newCoordinates = new Coordinates(actualX, actualY + 1);
+                changeCoordinates(actualX, actualY + 1);
                 break;
             case E:
-                newCoordinates = new Coordinates(actualX + 1, actualY);
+                changeCoordinates(actualX + 1, actualY);
                 break;
             case S:
-                newCoordinates = new Coordinates(actualX, actualY - 1);
+                changeCoordinates(actualX, actualY - 1);
                 break;
             case W:
-                newCoordinates =new Coordinates(actualX - 1, actualY);
+                changeCoordinates(actualX - 1, actualY);
                 break;
             default:
                 throw new BusinessException("Given Direction is Unknown");
         }
-        planet.registerLandOccupation(this, newCoordinates);
-        this.position = new Position(newCoordinates, direction);
+    }
+
+    public void rotateClockwise() {
+        switch (getDirection()) {
+            case N:
+                this.changeDirection(Direction.E);
+                break;
+            case E:
+                this.changeDirection(Direction.S);
+                break;
+            case S:
+                this.changeDirection(Direction.W);
+                break;
+            case W:
+                this.changeDirection(Direction.N);
+                break;
+        }
+    }
+
+    public void rotateCounterClockwise() {
+        switch (getDirection()) {
+            case N:
+                this.changeDirection(Direction.W);
+                break;
+            case W:
+                this.changeDirection(Direction.S);
+                break;
+            case S:
+                this.changeDirection(Direction.E);
+                break;
+            case E:
+                this.changeDirection(Direction.N);
+                break;
+        }
     }
 
     public Coordinates getCoordinates() {
@@ -86,6 +129,14 @@ public class SpaceProbe {
 
     private Boolean isLanded() {
         return this.planet != null;
+    }
+
+    private void changeDirection(Direction newDirection) {
+        position.setDirection(newDirection);
+    }
+
+    private void changeCoordinates(int x, int y) {
+        getCoordinates().changeCoordinates(x, y);
     }
 
     @Override

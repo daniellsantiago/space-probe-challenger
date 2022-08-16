@@ -57,7 +57,7 @@ public class SpaceProbeTest {
     }
 
     @Test
-    void Should_MoveForward_When_GivenDirectionIsNorth() throws BusinessException {
+    void Should_MoveForwardIncreasingOneInY_When_GivenDirectionIsNorth() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -73,7 +73,7 @@ public class SpaceProbeTest {
     }
 
     @Test
-    void Should_MoveRight_When_GivenDirectionIsEast() throws BusinessException {
+    void Should_RotateToEast_When_DirectionIsNorth() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -81,31 +81,59 @@ public class SpaceProbeTest {
         spaceProbe.landOnPlanet(planet, spaceProbePosition);
 
         // When
-        spaceProbe.move(Direction.E);
+        spaceProbe.rotateClockwise();
 
         // Then
-        Assertions.assertEquals(new Coordinates(4, 4), spaceProbe.getCoordinates());
         Assertions.assertEquals(Direction.E, spaceProbe.getDirection());
     }
 
     @Test
-    void Should_MoveBack_When_GivenDirectionIsSouth() throws BusinessException {
+    void Should_RotateToSouth_When_DirectionIsEast() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.N);
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.E);
         spaceProbe.landOnPlanet(planet, spaceProbePosition);
 
         // When
-        spaceProbe.move(Direction.S);
+        spaceProbe.rotateClockwise();
 
         // Then
-        Assertions.assertEquals(new Coordinates(3, 3), spaceProbe.getCoordinates());
         Assertions.assertEquals(Direction.S, spaceProbe.getDirection());
     }
 
     @Test
-    void Should_MoveLeft_When_GivenDirectionIsWest() throws BusinessException {
+    void Should_RotateToWest_When_DirectionIsSouth() throws BusinessException {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.S);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
+
+        // When
+        spaceProbe.rotateClockwise();
+
+        // Then
+        Assertions.assertEquals(Direction.W, spaceProbe.getDirection());
+    }
+
+    @Test
+    void Should_RotateToNorth_When_DirectionIsWest() throws BusinessException {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.W);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
+
+        // When
+        spaceProbe.rotateClockwise();
+
+        // Then
+        Assertions.assertEquals(Direction.N, spaceProbe.getDirection());
+    }
+
+    @Test
+    void Should_RotateToWest_When_DirectionIsNorth() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
@@ -113,10 +141,54 @@ public class SpaceProbeTest {
         spaceProbe.landOnPlanet(planet, spaceProbePosition);
 
         // When
-        spaceProbe.move(Direction.W);
+        spaceProbe.rotateCounterClockwise();
 
         // Then
-        Assertions.assertEquals(new Coordinates(2, 4), spaceProbe.getCoordinates());
         Assertions.assertEquals(Direction.W, spaceProbe.getDirection());
+    }
+
+    @Test
+    void Should_RotateToSouth_When_DirectionIsWest() throws BusinessException {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.W);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
+
+        // When
+        spaceProbe.rotateCounterClockwise();
+
+        // Then
+        Assertions.assertEquals(Direction.S, spaceProbe.getDirection());
+    }
+
+    @Test
+    void Should_RotateToEast_When_DirectionIsSouth() throws BusinessException {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.S);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
+
+        // When
+        spaceProbe.rotateCounterClockwise();
+
+        // Then
+        Assertions.assertEquals(Direction.E, spaceProbe.getDirection());
+    }
+
+    @Test
+    void Should_RotateToNorth_When_DirectionIsEast() throws BusinessException {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.E);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
+
+        // When
+        spaceProbe.rotateCounterClockwise();
+
+        // Then
+        Assertions.assertEquals(Direction.N, spaceProbe.getDirection());
     }
 }

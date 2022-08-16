@@ -14,24 +14,18 @@ public class Coordinates {
 
     private int y;
 
-    public Coordinates() {
-
-    }
-
     public Coordinates(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public Coordinates(UUID id, int x, int y) {
+    protected Coordinates(UUID id, int x, int y) {
         this.id = id;
         this.x = x;
         this.y = y;
     }
 
-    public void changeCoordinates(int x, int y) {
-        this.setY(y);
-        this.setX(x);
+    protected Coordinates() {
     }
 
     public int getX() {
@@ -44,18 +38,6 @@ public class Coordinates {
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     @Override

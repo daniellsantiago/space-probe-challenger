@@ -17,17 +17,17 @@ public class SpaceProbe {
     @Embedded
     private Position position;
 
-    public SpaceProbe() {
+    public SpaceProbe(UUID id) {
+        this.id = id;
     }
 
-    public SpaceProbe(UUID id, Planet planet, Position position) {
+    protected SpaceProbe(UUID id, Planet planet, Position position) {
         this.id = id;
         this.planet = planet;
         this.position = position;
     }
 
-    public SpaceProbe(UUID id) {
-        this.id = id;
+    protected SpaceProbe() {
     }
 
     public void landOnPlanet(Planet planet, Position position) throws BusinessException {
@@ -43,27 +43,26 @@ public class SpaceProbe {
         if (!isLanded()) {
             throw new BusinessException("SpaceProbe is not on Planet");
         }
-        int actualX = position.getCoordinates().getX();
-        int actualY = position.getCoordinates().getY();
-        Coordinates newCoordinates = new Coordinates(getCoordinates().getId(), actualX, actualY);
+
+        int actualX = getCoordinates().getX();
+        int actualY = getCoordinates().getY();
         switch (direction) {
             case N:
-                newCoordinates.changeCoordinates(actualX, actualY + 1);
+                changeCoordinates(actualX, actualY + 1);
                 break;
             case E:
-                newCoordinates.changeCoordinates(actualX + 1, actualY);
+                changeCoordinates(actualX + 1, actualY);
                 break;
             case S:
-                newCoordinates.changeCoordinates(actualX, actualY - 1);
+                changeCoordinates(actualX, actualY - 1);
                 break;
             case W:
-                newCoordinates.changeCoordinates(actualX - 1, actualY);
+                changeCoordinates(actualX - 1, actualY);
                 break;
             default:
                 throw new BusinessException("Given Direction is Unknown");
         }
-        this.planet.registerLandOccupation(this, newCoordinates);
-        this.changeCoordinates(newCoordinates);
+        this.planet.registerLandOccupation(this, getCoordinates());
     }
 
     public void rotateClockwise() {
@@ -116,7 +115,8 @@ public class SpaceProbe {
         this.position = new Position(getCoordinates(), newDirection);
     }
 
-    private void changeCoordinates(Coordinates newCoordinates) {
+    private void changeCoordinates(int x, int y) {
+        Coordinates newCoordinates = new Coordinates(getCoordinates().getId(), x, y);
         this.position = new Position(newCoordinates, getDirection());
     }
 

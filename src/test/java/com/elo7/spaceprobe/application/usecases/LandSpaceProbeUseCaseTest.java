@@ -35,16 +35,17 @@ public class LandSpaceProbeUseCaseTest {
     void Should_LandSpaceProbe_When_PlanetAndSpaceProbeAreStored() {
         // Given
         UUID spaceProbeId = UUID.randomUUID();
+        UUID planetId = UUID.randomUUID();
         Coordinates coordinates = new Coordinates(3, 4);
-        Planet planet = new Planet(UUID.randomUUID(), coordinates);
+        Planet planet = new Planet(planetId, coordinates);
         SpaceProbe spaceProbe = new SpaceProbe(spaceProbeId);
 
-        Coordinates landingCoordinates = new Coordinates(UUID.randomUUID(), 2, 3);
+        Coordinates landingCoordinates = new Coordinates(2, 3);
         LandSpaceProbeDTO landSpaceProbeDTO =
-            new LandSpaceProbeDTO(spaceProbeId, planet.getId(), landingCoordinates, Direction.N);
+            new LandSpaceProbeDTO(spaceProbeId, planetId, landingCoordinates, Direction.N);
 
         // When
-        Mockito.when(planetRepository.findById(planet.getId())).thenReturn(Optional.of(planet));
+        Mockito.when(planetRepository.findById(planetId)).thenReturn(Optional.of(planet));
         Mockito.when(spaceProbeRepository.findById(spaceProbeId)).thenReturn(Optional.of(spaceProbe));
         landSpaceProbeUseCase.execute(landSpaceProbeDTO);
 
@@ -59,7 +60,7 @@ public class LandSpaceProbeUseCaseTest {
         LandSpaceProbeDTO landSpaceProbeDTO = new LandSpaceProbeDTO(
             UUID.randomUUID(),
             UUID.randomUUID(),
-            new Coordinates(UUID.randomUUID(), 2, 3),
+            new Coordinates(2, 3),
             Direction.N
         );
 
@@ -73,16 +74,17 @@ public class LandSpaceProbeUseCaseTest {
     @Test
     void Should_ThrowNotFound_When_SpaceProbeIsNotStored() {
         // Given
-        Planet planet = new Planet();
+        UUID planetId = UUID.randomUUID();
+        Planet planet = new Planet(planetId, new Coordinates(5, 2));
         LandSpaceProbeDTO landSpaceProbeDTO = new LandSpaceProbeDTO(
             UUID.randomUUID(),
-            planet.getId(),
-            new Coordinates(UUID.randomUUID(), 2, 3),
+            planetId,
+            new Coordinates(2, 3),
             Direction.N
         );
 
         // When
-        Mockito.when(planetRepository.findById(planet.getId())).thenReturn(Optional.of(planet));
+        Mockito.when(planetRepository.findById(planetId)).thenReturn(Optional.of(planet));
         Mockito.when(spaceProbeRepository.findById(Mockito.any())).thenReturn(Optional.empty());
 
         // Then

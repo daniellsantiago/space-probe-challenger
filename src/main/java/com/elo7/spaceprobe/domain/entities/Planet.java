@@ -31,13 +31,13 @@ public class Planet {
         this.landedPlanets = new HashMap<>();
     }
 
-    public Planet(UUID id, Map<SpaceProbe, Coordinates> landedPlanets, Coordinates landSize) {
+    protected Planet(UUID id, Map<SpaceProbe, Coordinates> landedPlanets, Coordinates landSize) {
         this.id = id;
         this.landedPlanets = landedPlanets;
         this.landSize = landSize;
     }
 
-    public Planet() {
+    protected Planet() {
     }
 
     public void registerLandOccupation(SpaceProbe spaceProbe, Coordinates coordinates) throws BusinessException {
@@ -57,14 +57,6 @@ public class Planet {
             throw new RuntimeException("Provided SpaceProbe is not on Planet");
         }
         return landedPlanets.get(spaceProbe);
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public Coordinates getLandSize() {
-        return landSize;
     }
 
     private Boolean isCoordinatesFree(Coordinates coordinates) {

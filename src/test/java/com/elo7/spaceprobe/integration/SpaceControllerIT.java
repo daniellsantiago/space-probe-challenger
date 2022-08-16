@@ -43,14 +43,15 @@ public class SpaceControllerIT {
     @Transactional
     void Should_LandSpaceProbeOnPlanet_When_RequestIsValidAndSpaceProbeIsNotOnLandYet() throws Exception {
         // Given
+        UUID planetId = UUID.randomUUID();
         UUID spaceProbeId = UUID.randomUUID();
-        Planet planet = createGenericPlanet();
+        createGenericPlanet(planetId);
         SpaceProbe spaceProbe = createGenericSpaceProbe(spaceProbeId);
 
         // When
         Position landingPosition = new Position(new Coordinates(2, 3), Direction.N);
         LandSpaceProbeRequest request = new LandSpaceProbeRequest(
-            planet.getId(),
+            planetId,
             new LandSpaceProbeRequest.LandSpaceProbeCoordinatesRequest(
                 landingPosition.getCoordinates().getX(), landingPosition.getCoordinates().getY()
             ),
@@ -64,7 +65,7 @@ public class SpaceControllerIT {
 
         // Then
         SpaceProbe landedSpaceProbe = spaceProbeRepository.findById(spaceProbeId).get();
-        Planet planetWithSpaceProbe = planetRepository.findById(planet.getId()).get();
+        Planet planetWithSpaceProbe = planetRepository.findById(planetId).get();
 
         Assertions.assertEquals(spaceProbe, landedSpaceProbe);
         Assertions.assertTrue(planetWithSpaceProbe.isSpaceProbeOnLand(spaceProbe));
@@ -91,14 +92,14 @@ public class SpaceControllerIT {
     @Transactional
     void Should_GetError_When_PlanetDoesNotExists() throws Exception {
         // Given
+        UUID planetId = UUID.randomUUID();
         UUID spaceProbeId = UUID.randomUUID();
-        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
         createGenericSpaceProbe(spaceProbeId);
 
         // When / Then
         Position landingPosition = new Position(new Coordinates(2, 3), Direction.N);
         LandSpaceProbeRequest request = new LandSpaceProbeRequest(
-            planet.getId(),
+            planetId,
             new LandSpaceProbeRequest.LandSpaceProbeCoordinatesRequest(
                 landingPosition.getCoordinates().getX(), landingPosition.getCoordinates().getY()
             ),
@@ -115,16 +116,17 @@ public class SpaceControllerIT {
     @Transactional
     void Should_GetError_When_PlanetTriesToLandOnOccupiedPlace() throws Exception {
         // Given
+        UUID planetId = UUID.randomUUID();
         UUID spaceProbeId = UUID.randomUUID();
         UUID spaceProbeIdTwo = UUID.randomUUID();
-        Planet planet = createGenericPlanet();
+        createGenericPlanet(planetId);
         createGenericSpaceProbe(spaceProbeId);
         createGenericSpaceProbe(spaceProbeIdTwo);
 
         // When / Then
         Position landingPosition = new Position(new Coordinates(2, 3), Direction.N);
         LandSpaceProbeRequest request = new LandSpaceProbeRequest(
-            planet.getId(),
+            planetId,
             new LandSpaceProbeRequest.LandSpaceProbeCoordinatesRequest(
                 landingPosition.getCoordinates().getX(), landingPosition.getCoordinates().getY()
             ),
@@ -145,8 +147,9 @@ public class SpaceControllerIT {
     @Transactional
     void Should_MoveSpaceProbeForward_When_CommandsIsMoveCommand() throws Exception {
         // Given
+        UUID planetId = UUID.randomUUID();
         UUID spaceProbeId = UUID.randomUUID();
-        Planet planet = createGenericPlanet();
+        Planet planet = createGenericPlanet(planetId);
         SpaceProbe spaceProbe = createGenericSpaceProbe(spaceProbeId);
 
         Position landPosition = new Position(new Coordinates(2, 2), Direction.N);
@@ -175,8 +178,9 @@ public class SpaceControllerIT {
     @Transactional
     void Should_RotateSpaceProbeRight_When_CommandsIsRotateR() throws Exception {
         // Given
+        UUID planetId = UUID.randomUUID();
         UUID spaceProbeId = UUID.randomUUID();
-        Planet planet = createGenericPlanet();
+        Planet planet = createGenericPlanet(planetId);
         SpaceProbe spaceProbe = createGenericSpaceProbe(spaceProbeId);
 
         Position landPosition = new Position(new Coordinates(2, 2), Direction.N);
@@ -204,8 +208,9 @@ public class SpaceControllerIT {
     @Transactional
     void Should_ChangeSpaceProbePosition_When_CommandsAreMoveAndRotate() throws Exception {
         // Given
+        UUID planetId = UUID.randomUUID();
         UUID spaceProbeId = UUID.randomUUID();
-        Planet planet = createGenericPlanet();
+        Planet planet = createGenericPlanet(planetId);
         SpaceProbe spaceProbe = createGenericSpaceProbe(spaceProbeId);
 
         Position landPosition = new Position(new Coordinates(3, 3), Direction.E);
@@ -233,8 +238,9 @@ public class SpaceControllerIT {
     @Transactional
     void Should_Get422Status_When_SpaceProbeMovementIsNotValid() throws Exception {
         // Given
+        UUID planetId = UUID.randomUUID();
         UUID spaceProbeId = UUID.randomUUID();
-        Planet planet = createGenericPlanet();
+        Planet planet = createGenericPlanet(planetId);
         SpaceProbe spaceProbe = createGenericSpaceProbe(spaceProbeId);
 
         Position landPosition = new Position(new Coordinates(3, 3), Direction.E);
@@ -270,7 +276,6 @@ public class SpaceControllerIT {
     void Should_Get404Status_When_ProvidedCommandsAreInvalid() throws Exception {
         // Given
         UUID spaceProbeId = UUID.randomUUID();
-        SpaceProbe spaceProbe = new SpaceProbe(spaceProbeId);
 
         // When / Then
         ChangeSpaceProbePositionRequest request = new ChangeSpaceProbePositionRequest("CCCCC");
@@ -281,8 +286,8 @@ public class SpaceControllerIT {
             .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
-    private Planet createGenericPlanet() {
-        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+    private Planet createGenericPlanet(UUID planetId) {
+        Planet planet = new Planet(planetId, new Coordinates(5, 5));
         return planetRepository.save(planet);
     }
 

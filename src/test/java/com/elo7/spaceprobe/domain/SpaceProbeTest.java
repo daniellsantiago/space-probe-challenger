@@ -73,6 +73,31 @@ public class SpaceProbeTest {
     }
 
     @Test
+    void Should_ThrowException_When_TriesToMoveOnOutsidePlanetPosition() throws BusinessException {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Position spaceProbePosition = new Position(new Coordinates(3, 4), Direction.N);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
+
+        // When / Then
+        spaceProbe.move(Direction.N);
+        Assertions.assertThrows(BusinessException.class, () -> spaceProbe.move(Direction.N));
+    }
+
+    @Test
+    void Should_ThrowException_When_TriesToMoveToNegativePlanetPosition() throws BusinessException {
+        // Given
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        Position spaceProbePosition = new Position(new Coordinates(3, 0), Direction.S);
+        spaceProbe.landOnPlanet(planet, spaceProbePosition);
+
+        // When / Then
+        Assertions.assertThrows(BusinessException.class, () -> spaceProbe.move(Direction.S));
+    }
+
+    @Test
     void Should_RotateToEast_When_DirectionIsNorth() throws BusinessException {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));

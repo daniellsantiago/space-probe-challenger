@@ -43,22 +43,25 @@ public class SpaceProbe {
         }
         int actualX = position.getCoordinates().getX();
         int actualY = position.getCoordinates().getY();
+        Coordinates newCoordinates = new Coordinates(getCoordinates().getId(), actualX, actualY);
         switch (direction) {
             case N:
-                changeCoordinates(actualX, actualY + 1);
+                newCoordinates.changeCoordinates(actualX, actualY + 1);
                 break;
             case E:
-                changeCoordinates(actualX + 1, actualY);
+                newCoordinates.changeCoordinates(actualX + 1, actualY);
                 break;
             case S:
-                changeCoordinates(actualX, actualY - 1);
+                newCoordinates.changeCoordinates(actualX, actualY - 1);
                 break;
             case W:
-                changeCoordinates(actualX - 1, actualY);
+                newCoordinates.changeCoordinates(actualX - 1, actualY);
                 break;
             default:
                 throw new BusinessException("Given Direction is Unknown");
         }
+        this.planet.registerLandOccupation(this, newCoordinates);
+        this.setPosition(new Position(newCoordinates, getDirection()));
     }
 
     public void rotateClockwise() {

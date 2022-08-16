@@ -1,8 +1,10 @@
 package com.elo7.spaceprobe.integration;
 
 import com.elo7.spaceprobe.domain.*;
+import com.elo7.spaceprobe.interfaces.http.dto.ChangeSpaceProbePositionRequest;
+import com.elo7.spaceprobe.interfaces.http.dto.ChangeSpaceProbePositionResponse;
 import com.elo7.spaceprobe.interfaces.http.dto.LandSpaceProbeRequest;
-import com.elo7.spaceprobe.utils.JsonConvertionUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +23,13 @@ import java.util.UUID;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Transactional
 public class SpaceControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private SpaceProbeRepository spaceProbeRepository;
@@ -33,12 +38,11 @@ public class SpaceControllerIT {
     private PlanetRepository planetRepository;
 
     @Test
+    @Transactional
     void Should_LandSpaceProbeOnPlanet_When_RequestIsValidAndSpaceProbeIsNotOnLandYet() throws Exception {
         // Given
-        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
-        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-        planetRepository.save(planet);
-        spaceProbeRepository.save(spaceProbe);
+        Planet planet = createGenericPlanet();
+        SpaceProbe spaceProbe = createGenericSpaceProbe();
 
         // When
         Position landingPosition = new Position(new Coordinates(2, 3), Direction.N);
@@ -52,7 +56,7 @@ public class SpaceControllerIT {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/spaceProbe/" + spaceProbe.getId() + "/landing")
             .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonConvertionUtils.asJsonString(request)))
+                .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isCreated());
 
         // Then
@@ -66,6 +70,7 @@ public class SpaceControllerIT {
     }
 
     @Test
+    @Transactional
     void Should_GetError_When_RequestIsValid() throws Exception {
         LandSpaceProbeRequest invalidRequest = new LandSpaceProbeRequest(
             null,
@@ -75,16 +80,16 @@ public class SpaceControllerIT {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/spaceProbe/" + UUID.randomUUID() + "/landing")
             .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonConvertionUtils.asJsonString(invalidRequest)))
+                .content(objectMapper.writeValueAsString(invalidRequest)))
             .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
+    @Transactional
     void Should_GetError_When_PlanetDoesNotExists() throws Exception {
         // Given
         Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
-        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-        spaceProbeRepository.save(spaceProbe);
+        SpaceProbe spaceProbe = createGenericSpaceProbe();
 
         // When / Then
         Position landingPosition = new Position(new Coordinates(2, 3), Direction.N);
@@ -98,20 +103,18 @@ public class SpaceControllerIT {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/spaceProbe/" + spaceProbe.getId() + "/landing")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonConvertionUtils.asJsonString(request)))
+                .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
+    @Transactional
     void Should_GetError_When_PlanetTriesToLandOnOccupiedPlace() throws Exception {
         // Given
-        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
-        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
-        SpaceProbe spaceProbeTwo = new SpaceProbe(UUID.randomUUID());
+        Planet planet = createGenericPlanet();
+        SpaceProbe spaceProbe = createGenericSpaceProbe();
+        SpaceProbe spaceProbeTwo = createGenericSpaceProbe();
 
-        planetRepository.save(planet);
-        spaceProbeRepository.save(spaceProbeTwo);
-        spaceProbeRepository.save(spaceProbe);
         // When / Then
         Position landingPosition = new Position(new Coordinates(2, 3), Direction.N);
         LandSpaceProbeRequest request = new LandSpaceProbeRequest(
@@ -124,11 +127,156 @@ public class SpaceControllerIT {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/spaceProbe/" + spaceProbe.getId() + "/landing")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonConvertionUtils.asJsonString(request)));
+                .content(objectMapper.writeValueAsString(request)));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/spaceProbe/" + spaceProbeTwo.getId() + "/landing")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonConvertionUtils.asJsonString(request)))
+                .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+    }
+
+    @Test
+    @Transactional
+    void Should_MoveSpaceProbeForward_When_CommandsIsMoveCommand() throws Exception {
+        // Given
+        Planet planet = createGenericPlanet();
+        SpaceProbe spaceProbe = createGenericSpaceProbe();
+
+        Position landPosition = new Position(new Coordinates(2, 2), Direction.N);
+        spaceProbe.landOnPlanet(planet, landPosition);
+        spaceProbeRepository.save(spaceProbe);
+
+        // When
+        ChangeSpaceProbePositionRequest request = new ChangeSpaceProbePositionRequest("M");
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/spaceProbe/" + spaceProbe.getId() + "/position")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn();
+        ChangeSpaceProbePositionResponse mappedResponse =
+            objectMapper.readValue(result.getResponse().getContentAsString(), ChangeSpaceProbePositionResponse.class);
+
+        // Then
+        Assertions.assertEquals(landPosition.getDirection(), mappedResponse.getDirection());
+        Assertions.assertEquals(3, mappedResponse.getY());
+        Assertions.assertEquals(landPosition.getCoordinates().getY(), mappedResponse.getY());
+        Assertions.assertEquals(landPosition.getCoordinates().getX(), mappedResponse.getX());
+    }
+
+    @Test
+    @Transactional
+    void Should_RotateSpaceProbeRight_When_CommandsIsRotateR() throws Exception {
+        // Given
+        Planet planet = createGenericPlanet();
+        SpaceProbe spaceProbe = createGenericSpaceProbe();
+
+        Position landPosition = new Position(new Coordinates(2, 2), Direction.N);
+        spaceProbe.landOnPlanet(planet, landPosition);
+        spaceProbeRepository.save(spaceProbe);
+
+        // When
+        ChangeSpaceProbePositionRequest request = new ChangeSpaceProbePositionRequest("R");
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/spaceProbe/" + spaceProbe.getId() + "/position")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn();
+        ChangeSpaceProbePositionResponse mappedResponse =
+            objectMapper.readValue(result.getResponse().getContentAsString(), ChangeSpaceProbePositionResponse.class);
+
+        // Then
+        Assertions.assertEquals(Direction.E, mappedResponse.getDirection());
+        Assertions.assertEquals(landPosition.getCoordinates().getY(), mappedResponse.getY());
+        Assertions.assertEquals(landPosition.getCoordinates().getX(), mappedResponse.getX());
+    }
+
+    @Test
+    @Transactional
+    void Should_ChangeSpaceProbePosition_When_CommandsAreMoveAndRotate() throws Exception {
+        // Given
+        Planet planet = createGenericPlanet();
+        SpaceProbe spaceProbe = createGenericSpaceProbe();
+
+        Position landPosition = new Position(new Coordinates(3, 3), Direction.E);
+        spaceProbe.landOnPlanet(planet, landPosition);
+        spaceProbeRepository.save(spaceProbe);
+
+        // When
+        ChangeSpaceProbePositionRequest request = new ChangeSpaceProbePositionRequest("MMRMMRMRRML");
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/spaceProbe/" + spaceProbe.getId() + "/position")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn();
+        ChangeSpaceProbePositionResponse mappedResponse =
+            objectMapper.readValue(result.getResponse().getContentAsString(), ChangeSpaceProbePositionResponse.class);
+
+        // Then
+        Assertions.assertEquals(Direction.N, mappedResponse.getDirection());
+        Assertions.assertEquals(5, mappedResponse.getX());
+        Assertions.assertEquals(1, mappedResponse.getY());
+    }
+
+    @Test
+    @Transactional
+    void Should_Get422Status_When_SpaceProbeMovementIsNotValid() throws Exception {
+        // Given
+        Planet planet = createGenericPlanet();
+        SpaceProbe spaceProbe = createGenericSpaceProbe();
+
+        Position landPosition = new Position(new Coordinates(3, 3), Direction.E);
+        spaceProbe.landOnPlanet(planet, landPosition);
+        spaceProbeRepository.save(spaceProbe);
+
+        // When / Then
+        ChangeSpaceProbePositionRequest request = new ChangeSpaceProbePositionRequest("MMMMMM");
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/spaceProbe/" + spaceProbe.getId() + "/position")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+    }
+
+    @Test
+    @Transactional
+    void Should_Get400Status_When_SpaceProbeIsNotStored() throws Exception {
+        // Given
+        SpaceProbe spaceProbe = new SpaceProbe();
+
+        // When / Then
+        ChangeSpaceProbePositionRequest request = new ChangeSpaceProbePositionRequest("MMMMMM");
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/spaceProbe/" + spaceProbe.getId() + "/position")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    void Should_Get404Status_When_ProvidedCommandsAreInvalid() throws Exception {
+        // Given
+        SpaceProbe spaceProbe = new SpaceProbe();
+
+        // When / Then
+        ChangeSpaceProbePositionRequest request = new ChangeSpaceProbePositionRequest("CCCCC");
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/spaceProbe/" + spaceProbe.getId() + "/position")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    private Planet createGenericPlanet() {
+        Planet planet = new Planet(UUID.randomUUID(), new Coordinates(5, 5));
+        return planetRepository.save(planet);
+    }
+
+    private SpaceProbe createGenericSpaceProbe() {
+        SpaceProbe spaceProbe = new SpaceProbe(UUID.randomUUID());
+        return spaceProbeRepository.save(spaceProbe);
     }
 }

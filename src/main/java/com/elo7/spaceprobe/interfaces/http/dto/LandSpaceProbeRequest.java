@@ -20,6 +20,9 @@ public final class LandSpaceProbeRequest {
     @NotNull
     private Direction direction;
 
+    public LandSpaceProbeRequest() {
+    }
+
     public LandSpaceProbeRequest(UUID planetId, LandSpaceProbeCoordinatesRequest coordinates, Direction direction) {
         this.planetId = planetId;
         this.coordinates = coordinates;
@@ -67,6 +70,9 @@ public final class LandSpaceProbeRequest {
         @NotNull
         @Min(value = 0)
         private int y;
+
+        public LandSpaceProbeCoordinatesRequest() {
+        }
 
         public LandSpaceProbeCoordinatesRequest(int x, int y) {
             this.x = x;

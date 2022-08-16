@@ -1,14 +1,37 @@
 package com.elo7.spaceprobe.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Objects;
+import java.util.UUID;
 
+@Entity
 public class Coordinates {
-    private final int x;
-    private final int y;
+    @Id
+    private UUID id = UUID.randomUUID();
+
+    private int x;
+
+    private int y;
+
+    public Coordinates() {
+
+    }
 
     public Coordinates(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Coordinates(UUID id, int x, int y) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+    }
+
+    public void changeCoordinates(int x, int y) {
+        this.setY(y);
+        this.setX(x);
     }
 
     public int getX() {
@@ -17,6 +40,22 @@ public class Coordinates {
 
     public int getY() {
         return y;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override

@@ -1,0 +1,15 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres
+    container_name: spaceprobe-database
+    environment:
+      POSTGRES_DB: spaceprobe
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - data-volume:/var/lib/postgresql/data
+volumes:
+  data-volume:

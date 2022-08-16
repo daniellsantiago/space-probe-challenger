@@ -1,10 +1,19 @@
 package com.elo7.spaceprobe.domain;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Embeddable
 public class Position {
-    private final Coordinates coordinates;
-    private final Direction direction;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Coordinates coordinates;
+
+    @Enumerated(EnumType.STRING)
+    private Direction direction;
+
+    public Position() {
+    }
 
     public Position(Coordinates coordinates, Direction direction) {
         this.coordinates = coordinates;
@@ -17,6 +26,14 @@ public class Position {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     @Override

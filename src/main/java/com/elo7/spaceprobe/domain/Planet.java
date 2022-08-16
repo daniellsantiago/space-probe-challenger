@@ -1,18 +1,41 @@
 package com.elo7.spaceprobe.domain;
 
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class Planet {
-    private final UUID id;
-    private final Map<SpaceProbe, Coordinates> landedPlanets;
-    private final Coordinates landSize;
+
+    @Id
+    private UUID id = UUID.randomUUID();
+
+    @ManyToMany
+    @JoinTable(
+        name = "planet_space_probe_landings",
+        joinColumns = @JoinColumn(name = "planet_id"),
+        inverseJoinColumns = @JoinColumn(name = "coordinates_id"),
+        uniqueConstraints = @UniqueConstraint(columnNames = {"planet_id", "coordinates_id"})
+    )
+    private Map<SpaceProbe, Coordinates> landedPlanets;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Coordinates landSize;
 
     public Planet(UUID id, Coordinates landSize) {
         this.landSize = landSize;
         this.id = id;
 
         this.landedPlanets = new HashMap<>();
+    }
+
+    public Planet(UUID id, Map<SpaceProbe, Coordinates> landedPlanets, Coordinates landSize) {
+        this.id = id;
+        this.landedPlanets = landedPlanets;
+        this.landSize = landSize;
+    }
+
+    public Planet() {
     }
 
     public void registerLandOccupation(SpaceProbe spaceProbe, Coordinates coordinates) throws BusinessException {
@@ -32,6 +55,14 @@ public class Planet {
             throw new RuntimeException("Provided SpaceProbe is not on Planet");
         }
         return landedPlanets.get(spaceProbe);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public Coordinates getLandSize() {
+        return landSize;
     }
 
     private Boolean isCoordinatesFree(Coordinates coordinates) {
@@ -58,5 +89,9 @@ public class Planet {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Map<SpaceProbe, Coordinates> getLandedPlanets() {
+        return landedPlanets;
     }
 }

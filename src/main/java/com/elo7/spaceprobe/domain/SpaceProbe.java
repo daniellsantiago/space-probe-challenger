@@ -1,11 +1,18 @@
 package com.elo7.spaceprobe.domain;
 
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
+@Entity
 public class SpaceProbe {
-    private final UUID id;
+    @Id
+    private UUID id = UUID.randomUUID();
+
+    @ManyToOne
     private Planet planet;
+
+    @Embedded
     private Position position;
 
     public SpaceProbe(UUID id) {
@@ -51,6 +58,30 @@ public class SpaceProbe {
 
     public Direction getDirection() {
         return position.getDirection();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Planet getPlanet() {
+        return planet;
+    }
+
+    public void setPlanet(Planet planet) {
+        this.planet = planet;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     private Boolean isLanded() {

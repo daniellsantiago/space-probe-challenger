@@ -21,7 +21,7 @@ The command sequence is a set of instructions sent from Earth to the probe, wher
 - `R` -> Turn the probe to the right (90 degrees).
 The orientation of the probe within the Cartesian plane uses a compass rose as reference.
 
-## Getting Started
+## How to run
 
 Clone the project from Github :
 
@@ -41,11 +41,13 @@ If you don't have Docker installed, you'll need to set a local postgres database
 ``` shell
  $ ./mvnw spring-boot:run
  ```
+### Swagger
+Once the app is running, you can see the available endpoints on ``` localhost:8080/swagger-ui ```
 
 ### Good to improve
 
 - [ ] Add unit tests to controllers;
 - [ ] Move Persistence layer code from Domain to Infrastructure;
-- [ ] Add Swagger Support;
+- [X] Add Swagger Support;
 - [ ] Improve API error handling;
 - [ ] Add CRUD endpoints.

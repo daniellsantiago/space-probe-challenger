@@ -2,7 +2,10 @@ package com.daniellsantiago.spaceprobe.domain.entities;
 
 import com.daniellsantiago.spaceprobe.domain.exception.BusinessException;
 
-import javax.persistence.*;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import java.util.Objects;
 import java.util.UUID;
 

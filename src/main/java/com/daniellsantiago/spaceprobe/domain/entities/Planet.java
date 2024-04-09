@@ -3,7 +3,14 @@ package com.daniellsantiago.spaceprobe.domain.entities;
 
 import com.daniellsantiago.spaceprobe.domain.exception.BusinessException;
 
-import javax.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.UniqueConstraint;
 import java.util.*;
 
 @Entity

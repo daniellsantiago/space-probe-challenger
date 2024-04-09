@@ -5,8 +5,8 @@ import com.daniellsantiago.spaceprobe.application.dto.MoveCommandDto;
 import com.daniellsantiago.spaceprobe.application.dto.RotateCommandDto;
 import com.daniellsantiago.spaceprobe.application.dto.SpaceProbeCommandDto;
 
-import javax.validation.ValidationException;
-import javax.validation.constraints.NotEmpty;
+import com.daniellsantiago.spaceprobe.lib.exception.ValidationException;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

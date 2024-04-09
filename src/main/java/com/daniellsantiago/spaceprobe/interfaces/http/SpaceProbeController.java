@@ -5,10 +5,10 @@ import com.daniellsantiago.spaceprobe.interfaces.http.dto.ChangeSpaceProbePositi
 import com.daniellsantiago.spaceprobe.interfaces.http.dto.LandSpaceProbeRequest;
 import com.daniellsantiago.spaceprobe.application.usecases.LandSpaceProbeUseCase;
 import com.daniellsantiago.spaceprobe.application.usecases.MoveSpaceProbeUseCase;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController

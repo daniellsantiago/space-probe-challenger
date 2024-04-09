@@ -1,6 +1,10 @@
 package com.daniellsantiago.spaceprobe.domain.entities;
 
-import javax.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
 import java.util.Objects;
 
 @Embeddable

@@ -12,10 +12,9 @@ import com.daniellsantiago.spaceprobe.lib.ApplicationService;
 import com.daniellsantiago.spaceprobe.lib.exception.DomainException;
 import com.daniellsantiago.spaceprobe.lib.exception.NotFoundException;
 import com.daniellsantiago.spaceprobe.application.dto.*;
+import com.daniellsantiago.spaceprobe.lib.exception.ValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.validation.ValidationException;
 
 @Service
 public class MoveSpaceProbeUseCase implements

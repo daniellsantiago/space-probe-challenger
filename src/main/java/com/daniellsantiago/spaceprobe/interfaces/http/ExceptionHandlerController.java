@@ -3,14 +3,14 @@ package com.daniellsantiago.spaceprobe.interfaces.http;
 import com.daniellsantiago.spaceprobe.lib.exception.DomainException;
 import com.daniellsantiago.spaceprobe.lib.exception.NotFoundException;
 import com.daniellsantiago.spaceprobe.interfaces.http.dto.ApiErrorResponse;
+import com.daniellsantiago.spaceprobe.lib.exception.ValidationException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
 
 @ControllerAdvice
 public final class ExceptionHandlerController {

@@ -4,9 +4,9 @@ import com.daniellsantiago.spaceprobe.domain.entities.Coordinates;
 import com.daniellsantiago.spaceprobe.domain.entities.Direction;
 import com.daniellsantiago.spaceprobe.application.dto.LandSpaceProbeDTO;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public final class LandSpaceProbeRequest {

@@ -8,7 +8,7 @@
 		<version>2.7.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.elo7</groupId>
+	<groupId>com.daniellsantiago</groupId>
 	<artifactId>spaceprobe</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Space Probe Challenge</name>

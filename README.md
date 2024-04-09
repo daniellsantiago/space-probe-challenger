@@ -51,3 +51,6 @@ Once the app is running, you can see the available endpoints on ``` localhost:80
 - [X] Add Swagger Support;
 - [ ] Improve API error handling;
 - [ ] Add CRUD endpoints.
+
+## Deploy
+It was deployed to railway, you can access the public swagger via https://space-probe-challenger-production.up.railway.app/swagger-ui/index.html
